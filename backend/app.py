@@ -1,8 +1,10 @@
+from flask_cors import CORS
 from flask import Flask, request, jsonify
 import requests
 from config import OPENWEATHER_API_KEY, BASE_URL
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/weather")
 def weather():

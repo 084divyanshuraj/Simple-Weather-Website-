@@ -1,24 +1,3 @@
-// const button = document.getElementById("getWeatherBtn");
-// const cityInput = document.getElementById("cityInput");
-
-// const cityName = document.getElementById("cityName");
-// const temperature = document.getElementById("temperature");
-// const weatherDesc = document.getElementById("weatherDesc");
-
-// button.addEventListener("click", () => {
-//     const city = cityInput.value;
-
-//     if (city === "") {
-//         alert("Please enter a city name");
-//         return;
-//     }
-
-//     cityName.innerText = city;
-//     temperature.innerText = "25 °C";
-//     weatherDesc.innerText = "clear sky";
-// });
-
-
 const button = document.getElementById("getWeatherBtn");
 const cityInput = document.getElementById("cityInput");
 

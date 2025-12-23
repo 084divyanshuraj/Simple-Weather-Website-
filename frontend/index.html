@@ -7,18 +7,75 @@
 </head>
 <body>
 
-    <div class="container">
-        <h1>Weather Application</h1>
+    <!-- App Wrapper -->
+    <div class="app">
 
-        <input type="text" id="cityInput" placeholder="Enter city name">
+        <!-- Top Bar -->
+        <div class="top-bar">
+            <div class="theme-toggle">
+                Dark Mode
+            </div>
 
-        <button id="getWeatherBtn">Get Weather</button>
+            <div class="search-box">
+                <input type="text" placeholder="Search city">
+                <button>Search</button>
+            </div>
 
-        <div class="result">
-            <p>City: <span id="cityName">-</span></p>
-            <p>Temperature: <span id="temperature">-</span></p>
-            <p>Weather: <span id="weatherDesc">-</span></p>
+            <button class="location-btn">
+                Current Location
+            </button>
         </div>
+
+        <!-- Main Weather Section -->
+        <div class="main-section">
+
+            <!-- Left Card -->
+            <div class="left-card">
+                <h2 class="city-name">City Name</h2>
+                <h1 class="time">00:00</h1>
+                <p class="date">Day, Date</p>
+            </div>
+
+            <!-- Right Card -->
+            <div class="right-card">
+
+                <div class="temperature">
+                    <h1>25°C</h1>
+                    <p>Feels like 27°C</p>
+                </div>
+
+                <div class="condition">
+                    <p>Sunny</p>
+                </div>
+
+                <div class="details">
+                    <p>Humidity: 60%</p>
+                    <p>Wind: 10 km/h</p>
+                    <p>Pressure: 1012 hPa</p>
+                    <p>Sunrise: 06:00</p>
+                    <p>Sunset: 18:30</p>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Hourly Forecast -->
+        <div class="hourly-section">
+            <h3>Hourly Forecast</h3>
+
+            <div class="hourly-list">
+                <div class="hour-item">10 AM - 26°C</div>
+                <div class="hour-item">1 PM - 30°C</div>
+                <div class="hour-item">4 PM - 29°C</div>
+                <div class="hour-item">7 PM - 27°C</div>
+            </div>
+        </div>
+
+        <!-- 5 Day Forecast (Empty for now) -->
+        <div class="forecast-section">
+            <!-- Intentionally left empty -->
+        </div>
+
     </div>
 
     <script src="script.js"></script>

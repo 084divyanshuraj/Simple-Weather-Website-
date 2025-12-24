@@ -1,32 +1,46 @@
-const button = document.getElementById("getWeatherBtn");
-const cityInput = document.getElementById("cityInput");
+// Select elements
+const timeEl = document.querySelector(".time");
+const dateEl = document.querySelector(".date");
+const cityEl = document.querySelector(".city-name");
 
-const cityName = document.getElementById("cityName");
-const temperature = document.getElementById("temperature");
-const weatherDesc = document.getElementById("weatherDesc");
+const searchInput = document.querySelector(".search-box input");
+const searchButton = document.querySelector(".search-box button");
 
-button.addEventListener("click", () => {
-    const city = cityInput.value.trim();
+// Live Clock
+function updateTime() {
+    const now = new Date();
+
+    const hours = now.getHours().toString().padStart(2, "0");
+    const minutes = now.getMinutes().toString().padStart(2, "0");
+
+    const days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    const months = [
+        "January", "February", "March", "April", "May", "June",
+        "July", "August", "September", "October", "November", "December"
+    ];
+
+    const dayName = days[now.getDay()];
+    const date = now.getDate();
+    const month = months[now.getMonth()];
+    const year = now.getFullYear();
+
+    timeEl.textContent = `${hours}:${minutes}`;
+    dateEl.textContent = `${dayName}, ${date} ${month} ${year}`;
+}
+
+// Run clock immediately and every second
+updateTime();
+setInterval(updateTime, 1000);
+
+// City update (UI only)
+searchButton.addEventListener("click", () => {
+    const city = searchInput.value.trim();
 
     if (city === "") {
         alert("Please enter a city name");
         return;
     }
 
-    fetch(`http://127.0.0.1:5000/weather?city=${city}`)
-        .then(response => response.json())
-        .then(data => {
-            if (data.error) {
-                alert(data.error);
-                return;
-            }
-
-            cityName.innerText = data.city;
-            temperature.innerText = data.temperature + " °C";
-            weatherDesc.innerText = data.weather;
-        })
-        .catch(error => {
-            alert("Error connecting to server");
-            console.error(error);
-        });
+    cityEl.textContent = city;
+    searchInput.value = "";
 });

@@ -14,6 +14,10 @@ const searchButton = document.querySelector(".search-box button");
 const errorEl = document.querySelector(".error-message");
 
 const hourlyListEl = document.querySelector(".hourly-list");
+const themeToggle = document.querySelector(".theme-toggle");
+
+// ================= BACKEND URL =================
+const BACKEND_URL = "http://127.0.0.1:5000";
 
 // ================= LIVE CLOCK =================
 function updateTime() {
@@ -28,22 +32,12 @@ function updateTime() {
         "July", "August", "September", "October", "November", "December"
     ];
 
-    const dayName = days[now.getDay()];
-    const date = now.getDate();
-    const month = months[now.getMonth()];
-    const year = now.getFullYear();
-
     timeEl.textContent = `${hours}:${minutes}`;
-    dateEl.textContent = `${dayName}, ${date} ${month} ${year}`;
+    dateEl.textContent = `${days[now.getDay()]}, ${now.getDate()} ${months[now.getMonth()]} ${now.getFullYear()}`;
 }
 
 updateTime();
 setInterval(updateTime, 1000);
-
-// ================= API CONFIG =================
-const API_KEY = "41c012f3992f0d43321f59b6531b6117";
-const CURRENT_URL = "https://api.openweathermap.org/data/2.5/weather";
-const FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast";
 
 // ================= ERROR HANDLING =================
 function showError(message) {
@@ -61,85 +55,62 @@ async function getWeather(city) {
     try {
         clearError();
 
-        const response = await fetch(
-            `${CURRENT_URL}?q=${city}&appid=${API_KEY}&units=metric`
-        );
+        const response = await fetch(`${BACKEND_URL}/weather?city=${city}`);
 
         if (!response.ok) {
             throw new Error("City not found");
         }
 
         const data = await response.json();
-        updateWeatherUI(data);
+
+        cityEl.textContent = data.city;
+        tempEl.textContent = `${Math.round(data.temperature)}°C`;
+        feelsEl.textContent = `Feels like ${Math.round(data.feels_like)}°C`;
+        conditionEl.textContent = data.condition;
+
+        iconEl.src = `https://openweathermap.org/img/wn/${data.icon}@2x.png`;
+
+        detailEls[0].textContent = `Humidity: ${data.humidity}%`;
+        detailEls[1].textContent = `Wind: ${data.wind} m/s`;
+        detailEls[3].textContent = `Sunrise: ${new Date(data.sunrise * 1000).toLocaleTimeString()}`;
+        detailEls[4].textContent = `Sunset: ${new Date(data.sunset * 1000).toLocaleTimeString()}`;
 
     } catch (error) {
         showError(error.message);
     }
 }
 
-// ================= UPDATE CURRENT WEATHER UI =================
-function updateWeatherUI(data) {
-    cityEl.textContent = data.name;
-
-    tempEl.textContent = `${Math.round(data.main.temp)}°C`;
-    feelsEl.textContent = `Feels like ${Math.round(data.main.feels_like)}°C`;
-
-    const iconCode = data.weather[0].icon;
-    iconEl.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-    iconEl.alt = data.weather[0].description;
-
-    conditionEl.textContent = data.weather[0].description;
-
-    detailEls[0].textContent = `Humidity: ${data.main.humidity}%`;
-    detailEls[1].textContent = `Wind: ${data.wind.speed} m/s`;
-    detailEls[2].textContent = `Pressure: ${data.main.pressure} hPa`;
-    detailEls[3].textContent = `Sunrise: ${new Date(data.sys.sunrise * 1000).toLocaleTimeString()}`;
-    detailEls[4].textContent = `Sunset: ${new Date(data.sys.sunset * 1000).toLocaleTimeString()}`;
-}
-
 // ================= HOURLY FORECAST =================
 async function getHourlyForecast(city) {
     try {
-        const response = await fetch(
-            `${FORECAST_URL}?q=${city}&appid=${API_KEY}&units=metric`
-        );
-
-        if (!response.ok) {
-            throw new Error();
-        }
+        const response = await fetch(`${BACKEND_URL}/forecast?city=${city}`);
+        if (!response.ok) return;
 
         const data = await response.json();
-        updateHourlyUI(data.list);
+        updateHourlyUI(data);
 
     } catch {
-        // silently fail for now
+        console.log("Hourly forecast error");
     }
 }
 
-// ================= UPDATE HOURLY UI =================
 function updateHourlyUI(hourlyData) {
     hourlyListEl.innerHTML = "";
 
-    const nextHours = hourlyData.slice(0, 6);
-
-    nextHours.forEach(item => {
-        const time = new Date(item.dt * 1000).toLocaleTimeString([], {
+    hourlyData.forEach(item => {
+        const time = new Date(item.time * 1000).toLocaleTimeString([], {
             hour: "numeric",
             minute: "2-digit"
         });
-
-        const temp = Math.round(item.main.temp);
-        const wind = item.wind.speed;
-        const icon = item.weather[0].icon;
 
         const hourItem = document.createElement("div");
         hourItem.classList.add("hour-item");
 
         hourItem.innerHTML = `
             <p class="hour-time">${time}</p>
-            <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="">
-            <p class="hour-temp">${temp}°C</p>
-            <p class="hour-wind">${wind} km/h</p>
+            <img src="https://openweathermap.org/img/wn/${item.icon}@2x.png">
+            <p class="hour-temp">${Math.round(item.temp)}°C</p>
+            <p class="hour-wind">${item.wind} km/h</p>
         `;
 
         hourlyListEl.appendChild(hourItem);
@@ -157,21 +128,16 @@ searchButton.addEventListener("click", () => {
 
     getWeather(city);
     getHourlyForecast(city);
-
     searchInput.value = "";
 });
 
-// ================= DARK MODE TOGGLE =================
-const themeToggle = document.querySelector(".theme-toggle");
-
-// Load saved theme
+// ================= DARK MODE =================
 const savedTheme = localStorage.getItem("theme");
 if (savedTheme === "light") {
     document.body.classList.add("light");
     themeToggle.textContent = "☀️ Light Mode";
 }
 
-// Toggle theme
 themeToggle.addEventListener("click", () => {
     document.body.classList.toggle("light");
 

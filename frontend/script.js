@@ -11,6 +11,8 @@ const detailEls = document.querySelectorAll(".details p");
 const searchInput = document.querySelector(".search-box input");
 const searchButton = document.querySelector(".search-box button");
 
+const iconEl = document.querySelector(".weather-icon");
+
 // ===== LIVE CLOCK =====
 function updateTime() {
     const now = new Date();
@@ -66,7 +68,14 @@ function updateWeatherUI(data) {
     tempEl.textContent = `${Math.round(data.main.temp)}°C`;
     feelsEl.textContent = `Feels like ${Math.round(data.main.feels_like)}°C`;
 
+    const iconCode = data.weather[0].icon;
+    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
+
+    iconEl.src = iconUrl;
+    iconEl.alt = data.weather[0].description;
+
     conditionEl.textContent = data.weather[0].main;
+
 
     detailEls[0].textContent = `Humidity: ${data.main.humidity}%`;
     detailEls[1].textContent = `Wind: ${data.wind.speed} m/s`;

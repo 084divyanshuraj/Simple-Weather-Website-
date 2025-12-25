@@ -11,6 +11,7 @@ const detailEls = document.querySelectorAll(".details p");
 
 const searchInput = document.querySelector(".search-box input");
 const searchButton = document.querySelector(".search-box button");
+const errorEl = document.querySelector(".error-message");
 
 const hourlyListEl = document.querySelector(".hourly-list");
 
@@ -44,9 +45,22 @@ const API_KEY = "41c012f3992f0d43321f59b6531b6117";
 const CURRENT_URL = "https://api.openweathermap.org/data/2.5/weather";
 const FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast";
 
+// ================= ERROR HANDLING =================
+function showError(message) {
+    errorEl.textContent = message;
+    errorEl.style.display = "block";
+}
+
+function clearError() {
+    errorEl.textContent = "";
+    errorEl.style.display = "none";
+}
+
 // ================= CURRENT WEATHER =================
 async function getWeather(city) {
     try {
+        clearError();
+
         const response = await fetch(
             `${CURRENT_URL}?q=${city}&appid=${API_KEY}&units=metric`
         );
@@ -59,7 +73,7 @@ async function getWeather(city) {
         updateWeatherUI(data);
 
     } catch (error) {
-        alert(error.message);
+        showError(error.message);
     }
 }
 
@@ -91,14 +105,14 @@ async function getHourlyForecast(city) {
         );
 
         if (!response.ok) {
-            throw new Error("Hourly forecast not available");
+            throw new Error();
         }
 
         const data = await response.json();
         updateHourlyUI(data.list);
 
-    } catch (error) {
-        console.log(error.message);
+    } catch {
+        // silently fail for now
     }
 }
 
@@ -106,7 +120,7 @@ async function getHourlyForecast(city) {
 function updateHourlyUI(hourlyData) {
     hourlyListEl.innerHTML = "";
 
-    const nextHours = hourlyData.slice(0, 6); // next ~18 hours
+    const nextHours = hourlyData.slice(0, 6);
 
     nextHours.forEach(item => {
         const time = new Date(item.dt * 1000).toLocaleTimeString([], {
@@ -137,7 +151,7 @@ searchButton.addEventListener("click", () => {
     const city = searchInput.value.trim();
 
     if (city === "") {
-        alert("Please enter a city name");
+        showError("Please enter a city name");
         return;
     }
 

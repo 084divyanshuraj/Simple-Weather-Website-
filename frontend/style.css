@@ -227,3 +227,30 @@ body {
     margin-top: 6px;
     display: none;
 }
+
+/* ========== LIGHT MODE ========== */
+body.light {
+    background-color: #f1f5f9;
+    color: #0f172a;
+}
+
+body.light .left-card,
+body.light .right-card,
+body.light .hourly-section {
+    background-color: #ffffff;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+}
+
+body.light .hour-item {
+    background-color: #e5e7eb;
+}
+
+body.light .search-box button,
+body.light .location-btn {
+    background-color: #e5e7eb;
+    color: #0f172a;
+}
+
+body.light .weather-icon {
+    filter: none;
+}

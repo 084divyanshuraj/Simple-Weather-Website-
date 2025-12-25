@@ -160,3 +160,26 @@ searchButton.addEventListener("click", () => {
 
     searchInput.value = "";
 });
+
+// ================= DARK MODE TOGGLE =================
+const themeToggle = document.querySelector(".theme-toggle");
+
+// Load saved theme
+const savedTheme = localStorage.getItem("theme");
+if (savedTheme === "light") {
+    document.body.classList.add("light");
+    themeToggle.textContent = "☀️ Light Mode";
+}
+
+// Toggle theme
+themeToggle.addEventListener("click", () => {
+    document.body.classList.toggle("light");
+
+    if (document.body.classList.contains("light")) {
+        themeToggle.textContent = "☀️ Light Mode";
+        localStorage.setItem("theme", "light");
+    } else {
+        themeToggle.textContent = "🌙 Dark Mode";
+        localStorage.setItem("theme", "dark");
+    }
+});

@@ -1,17 +1,19 @@
-from flask_cors import CORS
 from flask import Flask, request, jsonify
 import requests
 from config import OPENWEATHER_API_KEY, BASE_URL
 
 app = Flask(__name__)
-CORS(app)
+
+@app.route("/")
+def home():
+    return "Weather Backend Running"
 
 @app.route("/weather")
-def weather():
+def get_weather():
     city = request.args.get("city")
 
     if not city:
-        return jsonify({"error": "City not provided"}), 400
+        return jsonify({"error": "City is required"}), 400
 
     params = {
         "q": city,
@@ -26,12 +28,16 @@ def weather():
 
     data = response.json()
 
-    return jsonify({
+    cleaned_data = {
         "city": data["name"],
         "temperature": data["main"]["temp"],
-        "weather": data["weather"][0]["description"]
-    })
+        "feels_like": data["main"]["feels_like"],
+        "condition": data["weather"][0]["description"],
+        "humidity": data["main"]["humidity"],
+        "wind": data["wind"]["speed"]
+    }
 
+    return jsonify(cleaned_data)
 
 if __name__ == "__main__":
     app.run(debug=True)

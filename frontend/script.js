@@ -1,4 +1,4 @@
-// ===== ELEMENT SELECTION =====
+// ================= ELEMENT SELECTION =================
 const timeEl = document.querySelector(".time");
 const dateEl = document.querySelector(".date");
 const cityEl = document.querySelector(".city-name");
@@ -6,14 +6,15 @@ const cityEl = document.querySelector(".city-name");
 const tempEl = document.querySelector(".temperature h1");
 const feelsEl = document.querySelector(".temperature p");
 const conditionEl = document.querySelector(".condition p");
+const iconEl = document.querySelector(".weather-icon");
 const detailEls = document.querySelectorAll(".details p");
 
 const searchInput = document.querySelector(".search-box input");
 const searchButton = document.querySelector(".search-box button");
 
-const iconEl = document.querySelector(".weather-icon");
+const hourlyListEl = document.querySelector(".hourly-list");
 
-// ===== LIVE CLOCK =====
+// ================= LIVE CLOCK =================
 function updateTime() {
     const now = new Date();
 
@@ -38,15 +39,16 @@ function updateTime() {
 updateTime();
 setInterval(updateTime, 1000);
 
-// ===== WEATHER API CONFIG =====
+// ================= API CONFIG =================
 const API_KEY = "41c012f3992f0d43321f59b6531b6117";
-const BASE_URL = "https://api.openweathermap.org/data/2.5/weather";
+const CURRENT_URL = "https://api.openweathermap.org/data/2.5/weather";
+const FORECAST_URL = "https://api.openweathermap.org/data/2.5/forecast";
 
-// ===== FETCH WEATHER =====
+// ================= CURRENT WEATHER =================
 async function getWeather(city) {
     try {
         const response = await fetch(
-            `${BASE_URL}?q=${city}&appid=${API_KEY}&units=metric`
+            `${CURRENT_URL}?q=${city}&appid=${API_KEY}&units=metric`
         );
 
         if (!response.ok) {
@@ -61,7 +63,7 @@ async function getWeather(city) {
     }
 }
 
-// ===== UPDATE UI =====
+// ================= UPDATE CURRENT WEATHER UI =================
 function updateWeatherUI(data) {
     cityEl.textContent = data.name;
 
@@ -69,13 +71,10 @@ function updateWeatherUI(data) {
     feelsEl.textContent = `Feels like ${Math.round(data.main.feels_like)}°C`;
 
     const iconCode = data.weather[0].icon;
-    const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
-
-    iconEl.src = iconUrl;
+    iconEl.src = `https://openweathermap.org/img/wn/${iconCode}@2x.png`;
     iconEl.alt = data.weather[0].description;
 
-    conditionEl.textContent = data.weather[0].main;
-
+    conditionEl.textContent = data.weather[0].description;
 
     detailEls[0].textContent = `Humidity: ${data.main.humidity}%`;
     detailEls[1].textContent = `Wind: ${data.wind.speed} m/s`;
@@ -84,7 +83,56 @@ function updateWeatherUI(data) {
     detailEls[4].textContent = `Sunset: ${new Date(data.sys.sunset * 1000).toLocaleTimeString()}`;
 }
 
-// ===== SEARCH BUTTON =====
+// ================= HOURLY FORECAST =================
+async function getHourlyForecast(city) {
+    try {
+        const response = await fetch(
+            `${FORECAST_URL}?q=${city}&appid=${API_KEY}&units=metric`
+        );
+
+        if (!response.ok) {
+            throw new Error("Hourly forecast not available");
+        }
+
+        const data = await response.json();
+        updateHourlyUI(data.list);
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+// ================= UPDATE HOURLY UI =================
+function updateHourlyUI(hourlyData) {
+    hourlyListEl.innerHTML = "";
+
+    const nextHours = hourlyData.slice(0, 6); // next ~18 hours
+
+    nextHours.forEach(item => {
+        const time = new Date(item.dt * 1000).toLocaleTimeString([], {
+            hour: "numeric",
+            minute: "2-digit"
+        });
+
+        const temp = Math.round(item.main.temp);
+        const wind = item.wind.speed;
+        const icon = item.weather[0].icon;
+
+        const hourItem = document.createElement("div");
+        hourItem.classList.add("hour-item");
+
+        hourItem.innerHTML = `
+            <p class="hour-time">${time}</p>
+            <img src="https://openweathermap.org/img/wn/${icon}@2x.png" alt="">
+            <p class="hour-temp">${temp}°C</p>
+            <p class="hour-wind">${wind} km/h</p>
+        `;
+
+        hourlyListEl.appendChild(hourItem);
+    });
+}
+
+// ================= SEARCH HANDLER =================
 searchButton.addEventListener("click", () => {
     const city = searchInput.value.trim();
 
@@ -94,5 +142,7 @@ searchButton.addEventListener("click", () => {
     }
 
     getWeather(city);
+    getHourlyForecast(city);
+
     searchInput.value = "";
 });

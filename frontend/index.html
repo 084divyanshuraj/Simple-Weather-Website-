@@ -1,107 +1,93 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Weather App</title>
-    <link rel="stylesheet" href="style.css">
-</head>
-<body>
-
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
     <!-- App Wrapper -->
     <div class="app">
+      <!-- Top Bar -->
+      <div class="top-bar">
+        <div class="theme-toggle">Dark Mode</div>
 
-        <!-- Top Bar -->
-        <div class="top-bar">
-            <div class="theme-toggle">
-                Dark Mode
-            </div>
-
-            <div class="search-box">
-                <input type="text" placeholder="Search city">
-                <button>Search</button>
-            </div>
-
-            <button class="location-btn">
-                Current Location
-            </button>
+        <div class="search-box">
+          <input type="text" placeholder="Search city" />
+          <button>Search</button>
         </div>
 
-        <!-- Main Weather Section -->
-        <div class="main-section">
+        <button class="location-btn">Current Location</button>
+      </div>
 
-            <!-- Left Card -->
-            <div class="left-card">
-                <h2 class="city-name">City Name</h2>
-                <h1 class="time">00:00</h1>
-                <p class="date">Day, Date</p>
-            </div>
-
-            <!-- Right Card -->
-            <div class="right-card">
-
-                <div class="temperature">
-                    <h1>25°C</h1>
-                    <p>Feels like 27°C</p>
-                </div>
-
-                <div class="condition">
-                    <img class="weather-icon" src="" alt="Weather Icon">
-                    <p>Sunny</p>
-                </div>
-
-
-                <div class="details">
-                    <p>Humidity: 60%</p>
-                    <p>Wind: 10 km/h</p>
-                    <p>Pressure: 1012 hPa</p>
-                    <p>Sunrise: 06:00</p>
-                    <p>Sunset: 18:30</p>
-                </div>
-
-            </div>
+      <!-- Main Weather Section -->
+      <div class="main-section">
+        <!-- Left Card -->
+        <div class="left-card">
+          <h2 class="city-name">City Name</h2>
+          <h1 class="time">00:00</h1>
+          <p class="date">Day, Date</p>
         </div>
 
-        <!-- Hourly Forecast -->
-        <div class="hourly-list">
+        <!-- Right Card -->
+        <div class="right-card">
+          <div class="temperature">
+            <h1>25°C</h1>
+            <p>Feels like 27°C</p>
+          </div>
 
-            <div class="hour-item">
-                <p class="hour-time">10 AM</p>
-                <img src="https://openweathermap.org/img/wn/01d@2x.png" alt="">
-                <p class="hour-temp">26°C</p>
-                <p class="hour-wind">3 km/h</p>
-            </div>
+          <div class="condition">
+            <img class="weather-icon" src="" alt="Weather Icon" />
+            <p>Sunny</p>
+          </div>
 
-            <div class="hour-item">
-                <p class="hour-time">1 PM</p>
-                <img src="https://openweathermap.org/img/wn/02d@2x.png" alt="">
-                <p class="hour-temp">30°C</p>
-                <p class="hour-wind">2 km/h</p>
-            </div>
+          <div class="details">
+            <p>Humidity: 60%</p>
+            <p>Wind: 10 km/h</p>
+            <p>Pressure: 1012 hPa</p>
+            <p>Sunrise: 06:00</p>
+            <p>Sunset: 18:30</p>
+          </div>
+        </div>
+      </div>
 
-            <div class="hour-item">
-                <p class="hour-time">4 PM</p>
-                <img src="https://openweathermap.org/img/wn/03d@2x.png" alt="">
-                <p class="hour-temp">29°C</p>
-                <p class="hour-wind">4 km/h</p>
-            </div>
-
-            <div class="hour-item">
-                <p class="hour-time">7 PM</p>
-                <img src="https://openweathermap.org/img/wn/04n@2x.png" alt="">
-                <p class="hour-temp">27°C</p>
-                <p class="hour-wind">3 km/h</p>
-            </div>
-
+      <!-- Hourly Forecast -->
+      <div class="hourly-list">
+        <div class="hour-item">
+          <p class="hour-time">10 AM</p>
+          <img src="https://openweathermap.org/img/wn/01d@2x.png" alt="" />
+          <p class="hour-temp">26°C</p>
+          <p class="hour-wind">3 km/h</p>
         </div>
 
-
-        <!-- 5 Day Forecast (Empty for now) -->
-        <div class="forecast-section">
-            <!-- Intentionally left empty -->
+        <div class="hour-item">
+          <p class="hour-time">1 PM</p>
+          <img src="https://openweathermap.org/img/wn/02d@2x.png" alt="" />
+          <p class="hour-temp">30°C</p>
+          <p class="hour-wind">2 km/h</p>
         </div>
 
+        <div class="hour-item">
+          <p class="hour-time">4 PM</p>
+          <img src="https://openweathermap.org/img/wn/03d@2x.png" alt="" />
+          <p class="hour-temp">29°C</p>
+          <p class="hour-wind">4 km/h</p>
+        </div>
+
+        <div class="hour-item">
+          <p class="hour-time">7 PM</p>
+          <img src="https://openweathermap.org/img/wn/04n@2x.png" alt="" />
+          <p class="hour-temp">27°C</p>
+          <p class="hour-wind">3 km/h</p>
+        </div>
+      </div>
+
+      <!-- 5 Day Forecast (Empty for now) -->
+      <div class="forecast-section">
+        <!-- Intentionally left empty -->
+      </div>
     </div>
 
     <script src="script.js"></script>
-</body>
+  </body>
 </html>

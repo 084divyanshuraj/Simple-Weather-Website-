@@ -32,6 +32,8 @@ API integration and basic project structure.
 3. Add your API key in `config.py`  
 4. Run the backend file:
 
+Future plan to add some more things in this and make its GUI more perfect
+
 <img width="1910" height="914" alt="image" src="https://github.com/user-attachments/assets/2d932c30-94f0-4a41-b7ff-e2f324234f57" />
 
 <img width="1911" height="921" alt="image" src="https://github.com/user-attachments/assets/47e280f2-5b1f-4acf-ae05-01c0992f7070" />
